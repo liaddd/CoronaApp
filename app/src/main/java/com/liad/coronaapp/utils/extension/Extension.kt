@@ -4,8 +4,9 @@ import android.annotation.SuppressLint
 import android.app.Activity
 import android.content.Context
 import android.content.Context.LOCATION_SERVICE
+import android.content.Intent
 import android.location.LocationManager
-import android.util.Log
+import android.os.Bundle
 import android.view.View
 import android.widget.Toast
 import androidx.annotation.IdRes
@@ -19,11 +20,7 @@ import java.util.*
 
 // Change fragment extension function to handle navigation easily
 @SuppressLint("PrivateResource")
-fun changeFragment(
-    fragmentManager: FragmentManager?, @IdRes containerId: Int,
-    fragment: Fragment,
-    addToBackStack: Boolean = false
-) {
+fun changeFragment(fragmentManager: FragmentManager?, @IdRes containerId: Int, fragment: Fragment, addToBackStack: Boolean = false) {
     if (fragmentManager == null) return
     val fragmentTransaction = fragmentManager.beginTransaction()
     if (addToBackStack) fragmentTransaction.addToBackStack(null)
@@ -38,17 +35,29 @@ fun changeFragment(
         .commit()
 }
 
+// Navigate between activities easier
+fun Activity.changeActivity(
+    destination: Class<*>,
+    closeCurrent: Boolean = false,
+    data: Bundle? = null
+) {
+    val intent = Intent(this, destination)
+    data?.let { intent.putExtras(it) }
+    startActivity(intent)
+    if (closeCurrent) finish()
+}
 
 fun toast(context: Context, message: String, duration: Int = Toast.LENGTH_SHORT) {
     Toast.makeText(context, message, duration).show()
 }
 
-
+// MutableList extension function used to clear list and add new values
 fun <T> MutableList<T>.clearAndAddAll(newData: List<T>) {
     clear()
     addAll(newData)
 }
 
+// View extension function to Toggle between View visibility states
 fun View.show(show: Boolean = true) {
     visibility = if (show) View.VISIBLE else View.GONE
 }
@@ -61,10 +70,11 @@ fun String.toDateFormat(): String {
     try {
         date = inputFormat.parse(this)
     } catch (e: ParseException) {
-        Log.d("Liad", e.printStackTrace().toString())
+        e.printStackTrace()
     }
     return outputFormat.format(date)
 }
+
 // Formatting receiver String (as Date) value to String format
 fun String.dateToStringFormat(): String {
     val inputFormat = SimpleDateFormat("yyyy-MM-dd'T'HH:mm:ss'Z'", Locale.getDefault())
@@ -73,7 +83,7 @@ fun String.dateToStringFormat(): String {
     date = try {
         inputFormat.parse(this)
     } catch (e: ParseException) {
-        Log.d("Liad", e.printStackTrace().toString())
+        e.printStackTrace()
         Date()
     }
     return outputFormat.format(date)
@@ -84,7 +94,7 @@ fun TextInputEditText.isValid(): Boolean {
     return !this.text.isNullOrBlank()
 }
 
-// Compare between two dates
+// Compare between two dates (validate toDate is after or the same as String receiver
 fun String.isBefore(toDate : String): Boolean {
     val inputFormat = SimpleDateFormat("dd/MM/yyyy", Locale.getDefault())
     var date: Date? = null
@@ -93,7 +103,7 @@ fun String.isBefore(toDate : String): Boolean {
         date = inputFormat.parse(this)
         date2 = inputFormat.parse(toDate)
     } catch (e: ParseException) {
-        Log.d("Liad", e.printStackTrace().toString())
+        e.printStackTrace()
     }
     return date?.before(date2) ?: false || date?.compareTo(date2) == 0
 }

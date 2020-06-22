@@ -121,14 +121,43 @@ class CountriesFragment : Fragment(), View.OnClickListener, DatePickerDialog.OnD
         }
     }
 
-    // handle buttons on click
+    // Handle buttons on click
     override fun onClick(view: View?) {
         when (view?.id) {
             R.id.fragment_countries_from_text_input_edit_text -> showDatePickerDialog(Constants.FROM)
             R.id.fragment_countries_to_text_input_edit_text -> showDatePickerDialog(Constants.TO)
             R.id.fragment_countries_submit_button -> if(isInputsValid() && selectedCountry != null) showCountryDetails() else showRelevantError()
-            R.id.fragment_countries_my_country_button -> checkForCurrentLocation()
+            R.id.fragment_countries_my_country_button -> checkForLocationPermission()
             R.id.fragment_countries_check_for_nearby_button -> { showNearbyBTDevices()}
+        }
+    }
+
+    // Check if user enabled access to Location
+    private fun checkForLocationPermission() {
+        context?.let {
+            if (ActivityCompat.checkSelfPermission(it, Manifest.permission.ACCESS_FINE_LOCATION) == PackageManager.PERMISSION_GRANTED) {
+                getCurrentLocation()
+            } else askLocationPermission()
+        }
+    }
+
+    // Ask for location permission (after inputs validation)
+    private fun askLocationPermission() {
+        if (!isInputsValid()){
+            context?.let { toast(it, getString(R.string.invalid_inputs)) }
+            return
+        }
+        activity?.let {
+            if (ContextCompat.checkSelfPermission(it, Manifest.permission.ACCESS_FINE_LOCATION) != PackageManager.PERMISSION_GRANTED) {
+                if (ActivityCompat.shouldShowRequestPermissionRationale(it, Manifest.permission.ACCESS_FINE_LOCATION)) {
+                    // add dialog
+                    showNoGpsDialog()
+                }else{
+                    requestPermissions(arrayOf(Manifest.permission.ACCESS_FINE_LOCATION, Manifest.permission.ACCESS_FINE_LOCATION), LOCATION_REQUEST_CODE)
+                }
+            }else{
+                requestPermissions(arrayOf(Manifest.permission.ACCESS_FINE_LOCATION, Manifest.permission.ACCESS_FINE_LOCATION), LOCATION_REQUEST_CODE)
+            }
         }
     }
 
@@ -152,83 +181,55 @@ class CountriesFragment : Fragment(), View.OnClickListener, DatePickerDialog.OnD
         }
     }
 
-    // Check if user enabled access to Location
-    private fun checkForCurrentLocation() {
-        context?.let {
-            if (ActivityCompat.checkSelfPermission(it, Manifest.permission.ACCESS_FINE_LOCATION) == PackageManager.PERMISSION_GRANTED) {
-                getCurrentLocation()
-            } else askLocationPermission()
-        }
-    }
-
-    // ask for location permission (after inputs validation)
-    private fun askLocationPermission() {
-        if (!isInputsValid()){
-            context?.let { toast(it, getString(R.string.invalid_inputs)) }
-            return
-        }
-        activity?.let {
-            if (ContextCompat.checkSelfPermission(it, Manifest.permission.ACCESS_FINE_LOCATION) != PackageManager.PERMISSION_GRANTED) {
-                if (ActivityCompat.shouldShowRequestPermissionRationale(it, Manifest.permission.ACCESS_FINE_LOCATION)) {
-                    // add dialog
-                    showNoGpsDialog()
-                }else{
-                    requestPermissions(arrayOf(Manifest.permission.ACCESS_FINE_LOCATION, Manifest.permission.ACCESS_FINE_LOCATION), LOCATION_REQUEST_CODE)
-                }
-            }else{
-                requestPermissions(arrayOf(Manifest.permission.ACCESS_FINE_LOCATION, Manifest.permission.ACCESS_FINE_LOCATION), LOCATION_REQUEST_CODE)
-            }
-        }
-    }
-
     // Get Location Lat & Lon from LocationService
     @SuppressLint("MissingPermission")
     private fun getCurrentLocation() {
+        // validating relevant fields
+        if (!isInputsValid()){
+            showRelevantError()
+            return
+        }
+
+        fragment_countries_progress_bar?.show()
         val locationRequest = LocationRequest()
         locationRequest.interval = 1000
         locationRequest.fastestInterval = 1000
         locationRequest.priority = LocationRequest.PRIORITY_HIGH_ACCURACY
 
-        if (!isInputsValid()){
-            showRelevantError()
-            return
-        }
-        fragment_countries_progress_bar?.show()
-        context?.let {
-            activity?.let {
-                if(it.isDeviceLocationEnabled()){
-                    LocationServices.getFusedLocationProviderClient(it).requestLocationUpdates(locationRequest, object : LocationCallback() {
-                        override fun onLocationResult(locationResult: LocationResult?) {
-                            super.onLocationResult(locationResult)
-                            fragment_countries_progress_bar?.show(false)
-                            if (locationResult != null) {
-                                val geoCoder = Geocoder(it, Locale.getDefault())
-                                val addresses = geoCoder.getFromLocation(locationResult.lastLocation.latitude, locationResult.lastLocation.longitude, 1)
-                                if (addresses.size > 0) {
-                                    val countrySlug = addresses[0].countryName.decapitalize()
-                                    selectedCountry = Country(slug = countrySlug)
-                                    showCountryDetails()
-                                }
+        activity?.let {
+            if(it.isDeviceLocationEnabled()){
+                LocationServices.getFusedLocationProviderClient(it).requestLocationUpdates(locationRequest, object : LocationCallback() {
+                    override fun onLocationResult(locationResult: LocationResult?) {
+                        super.onLocationResult(locationResult)
+                        fragment_countries_progress_bar?.show(false)
+                        if (locationResult != null) {
+                            val geoCoder = Geocoder(it, Locale.getDefault())
+                            val addresses = geoCoder.getFromLocation(locationResult.lastLocation.latitude, locationResult.lastLocation.longitude, 1)
+                            if (addresses.size > 0) {
+                                val countrySlug = addresses[0].countryName.decapitalize()
+                                selectedCountry = Country(slug = countrySlug)
+                                showCountryDetails()
                             }
-                            LocationServices.getFusedLocationProviderClient(it).removeLocationUpdates(this)
                         }
-                    }, Looper.getMainLooper())
-                }else{
-                    showNoGpsDialog()
-                }
+                        LocationServices.getFusedLocationProviderClient(it).removeLocationUpdates(this)
+                    }
+                }, Looper.getMainLooper())
+            }else{
+                showNoGpsDialog()
             }
         }
 
     }
 
+    // Show GPS needed dialog for users that denied access before
     private fun showNoGpsDialog() {
         context?.let {
             AlertDialog.Builder(it)
                 .setTitle(getString(R.string.no_gps))
                 .setMessage(getString(R.string.activate_gps))
-                .setPositiveButton("Yes") { _, _ ->
-                    this.startActivityForResult(Intent(Settings.ACTION_LOCATION_SOURCE_SETTINGS), LOCATION_REQUEST_CODE)
-                }.setNegativeButton("No") { dialog, _ ->
+                .setPositiveButton(getString(R.string.yes)) { _, _ ->
+                    startActivityForResult(Intent(Settings.ACTION_LOCATION_SOURCE_SETTINGS), LOCATION_REQUEST_CODE)
+                }.setNegativeButton(getString(R.string.no)) { dialog, _ ->
                     dialog.dismiss()
                 }
                 .create()

@@ -16,7 +16,7 @@
         android:layout_height="@dimen/size_200dp"
         android:layout_marginTop="@dimen/size_32dp"
         app:lottie_autoPlay="true"
-        app:lottie_fileName="corona_virus.json"
+        app:lottie_fileName="corona_happy.json"
         app:lottie_loop="true" />
 
     <TextView

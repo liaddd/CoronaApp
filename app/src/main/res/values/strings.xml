@@ -20,4 +20,8 @@
     <string name="from_date_invalid">Please fill From date</string>
     <string name="to_date_invalid">Please fill To date</string>
     <string name="no_selected_country">please select a Country or use Current location</string>
+    <string name="yes">Yes</string>
+    <string name="no">No</string>
+    <string name="unrecognized_error">Something went wrong please try again</string>
+    <string name="no_data">Could\'nt find any data</string>
 </resources>

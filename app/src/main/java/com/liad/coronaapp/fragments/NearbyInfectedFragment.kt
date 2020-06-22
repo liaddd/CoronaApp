@@ -11,7 +11,6 @@ import android.content.IntentFilter
 import android.content.pm.PackageManager
 import android.os.Bundle
 import android.provider.Settings
-import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
@@ -38,7 +37,8 @@ class NearbyInfectedFragment : Fragment() {
     private lateinit var bluetoothAdapter: BluetoothAdapter
     private val infectedBTDevices = mutableListOf<String>()
 
-    private val broadcastReceiver = object : BroadcastReceiver() {
+    // Broadcast receiver triggered by Bluetooth devices nearby
+    private val bluetoothReceiver = object : BroadcastReceiver() {
         override fun onReceive(context: Context?, intent: Intent?) {
             val action: String? = intent?.action
             if (BluetoothDevice.ACTION_FOUND == action) {
@@ -49,7 +49,6 @@ class NearbyInfectedFragment : Fragment() {
                         showBluetoothDevices(infectedBTDevices)
                     }
                 }
-                Log.d("Liad", "deviceName: ${device?.name}, deviceAddress: ${device?.address}")
             }
         }
     }
@@ -72,10 +71,10 @@ class NearbyInfectedFragment : Fragment() {
 
     private fun startDiscover() = bluetoothAdapter.startDiscovery()
 
-    private fun activateBluetooth() {
-        startActivityForResult(Intent(BluetoothAdapter.ACTION_REQUEST_DISCOVERABLE), BLUETOOTH_REQUEST_DISCOVERABLE)
-    }
+    // Ask the user to activate bluetooth directly
+    private fun activateBluetooth() = startActivityForResult(Intent(BluetoothAdapter.ACTION_REQUEST_DISCOVERABLE), BLUETOOTH_REQUEST_DISCOVERABLE)
 
+    // Check if Location and Bluetooth permission are granted and enabled
     private fun checkFroRelevantPermission() {
         activity?.let {
             // check for location access
@@ -97,6 +96,7 @@ class NearbyInfectedFragment : Fragment() {
         }
     }
 
+    // Show GPS required dialog for users denied permission before
     private fun showNoGpsDialog() {
         context?.let {
             AlertDialog.Builder(it)
@@ -110,9 +110,9 @@ class NearbyInfectedFragment : Fragment() {
                 .create()
                 .show()
         }
-
     }
 
+    // Display Bluetooth devices nearby (infected one's)
     private fun showBluetoothDevices(devices: List<String>) {
         context?.let {
             if (!devices.isNullOrEmpty()) {
@@ -125,14 +125,16 @@ class NearbyInfectedFragment : Fragment() {
         }
     }
 
+    // overriding onResume to register available bluetoothReceiver
     override fun onResume() {
         super.onResume()
-        activity?.registerReceiver(broadcastReceiver, IntentFilter(BluetoothDevice.ACTION_FOUND))
+        activity?.registerReceiver(bluetoothReceiver, IntentFilter(BluetoothDevice.ACTION_FOUND))
     }
 
+    // overriding onResume to unregister available bluetoothReceiver
     override fun onPause() {
         super.onPause()
-        activity?.unregisterReceiver(broadcastReceiver)
+        activity?.unregisterReceiver(bluetoothReceiver)
     }
 
     override fun onRequestPermissionsResult(requestCode: Int, permissions: Array<out String>, grantResults: IntArray) {
@@ -154,7 +156,7 @@ class NearbyInfectedFragment : Fragment() {
     }
 
     override fun onActivityResult(requestCode: Int, resultCode: Int, data: Intent?) {
-        //super.onActivityResult(requestCode, resultCode, data)
+        super.onActivityResult(requestCode, resultCode, data)
         when (requestCode) {
             BLUETOOTH_REQUEST_DISCOVERABLE ->
                 if (resultCode == BLUETOOTH_RESULT_OK) {

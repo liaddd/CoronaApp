@@ -12,6 +12,7 @@ class MainActivity : FragmentActivity() {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_main)
 
+        // Navigate To MainFragment
         changeFragment(supportFragmentManager , R.id.main_activity_frame_layout , CountriesFragment.newInstance())
     }
 }

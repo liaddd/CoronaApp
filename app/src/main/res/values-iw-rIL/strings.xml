@@ -19,4 +19,8 @@
     <string name="from_date_invalid">אנא הכנס תאריך התחלה</string>
     <string name="to_date_invalid">אנא הכנס תאריך סוף</string>
     <string name="no_selected_country">נא לבחור ארץ או לחפש לפי מיקומך</string>
+    <string name="yes">כן</string>
+    <string name="no">לא</string>
+    <string name="unrecognized_error">קרתה תקלה, אנא נסה שוב</string>
+    <string name="no_data">לא נמצא מידע</string>
 </resources>

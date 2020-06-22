@@ -40,6 +40,37 @@
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toBottomOf="@+id/fragment_country_details_sub_title" />
 
+    <LinearLayout
+        android:id="@+id/fragment_country_details_empty_state_container"
+        android:orientation="vertical"
+        app:layout_constraintTop_toTopOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintBottom_toBottomOf="parent"
+        android:layout_width="wrap_content"
+        android:visibility="gone"
+        android:layout_height="wrap_content">
+
+        <TextView
+            android:textColor="@android:color/black"
+            android:textStyle="bold"
+            android:textSize="24sp"
+            android:text="@string/no_data"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"/>
+
+        <com.airbnb.lottie.LottieAnimationView
+            android:layout_width="@dimen/size_200dp"
+            android:layout_height="@dimen/size_200dp"
+            android:layout_marginTop="@dimen/size_32dp"
+            app:lottie_autoPlay="true"
+            android:layout_gravity="center_horizontal"
+            app:lottie_fileName="no_data.json"
+            app:lottie_loop="true" />
+
+
+    </LinearLayout>
+
     <ProgressBar
         android:id="@+id/fragment_country_details_progress_bar"
         app:layout_constraintTop_toTopOf="parent"

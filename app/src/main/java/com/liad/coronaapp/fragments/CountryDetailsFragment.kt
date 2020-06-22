@@ -21,7 +21,7 @@ import org.koin.android.ext.android.inject
 
 class CountryDetailsFragment : Fragment() {
 
-    // initializing static class properties
+    // Initializing static class properties
     companion object {
         fun newInstance() = CountryDetailsFragment()
     }
@@ -42,16 +42,20 @@ class CountryDetailsFragment : Fragment() {
         initViews()
     }
 
+    // Initializing Fragment Views
     private fun initViews() {
         fromDate = arguments?.getString(Constants.FROM) ?: ""
         toDate = arguments?.getString(Constants.TO) ?: ""
         countryName = arguments?.getString(Constants.COUNTRY_NAME) ?: ""
-        if (!countryName.isBlank() && !fromDate.isBlank() && !toDate.isBlank()){
+        // check if all required fields are Initialized
+        if (countryName.isNotBlank() && fromDate.isNotBlank() && toDate.isNotBlank()){
             getCountryDetails()
             fragment_country_details_title?.text = getString(R.string.results, countryName ,fromDate.dateToStringFormat(), toDate.dateToStringFormat())
-        }else fragment_country_details_title?.text = "Something went wrong please try again"
+        }
+        else fragment_country_details_title?.text = getString(R.string.unrecognized_error)
     }
 
+    // Fetching Country details from api
     private fun getCountryDetails() {
         coronaViewModel.getCountryBy(countryName, fromDate, toDate)
             .observe(viewLifecycleOwner, Observer { countries ->
@@ -59,27 +63,34 @@ class CountryDetailsFragment : Fragment() {
                     is StatefulData.Loading -> fragment_country_details_progress_bar?.show()
                     is StatefulData.Success -> {
                         fragment_country_details_progress_bar?.show(false)
-                        showData(countries.data)
+                        if (countries.data.isNullOrEmpty()) fragment_country_details_empty_state_container?.show()
+                        else showData(countries.data)
                     }
                     is StatefulData.Error -> fragment_country_details_progress_bar?.show(false)
                 }
             })
     }
 
+    // Display Country details in Chart
     private fun showData(countries: List<CountryDetails>) {
         val pie = AnyChart.pie()
 
-        val confirmed = countries.lastOrNull()?.confirmed
-        val recovered = countries.lastOrNull()?.recovered
-        val deaths = countries.lastOrNull()?.deaths
+        val confirmed = countries.lastOrNull()?.confirmed ?: 0
+        val recovered = countries.lastOrNull()?.recovered ?: 0
+        val deaths = countries.lastOrNull()?.deaths ?: 0
 
-        pie.data(
-            listOf<DataEntry>(
-                ValueDataEntry("Confirmed", confirmed),
-                ValueDataEntry("Recovered", recovered),
-                ValueDataEntry("Death", deaths)
+        // validate valuable values
+        if (confirmed > 0 && recovered > 0 && deaths > 0){
+            pie.data(
+                listOf<DataEntry>(
+                    ValueDataEntry("Confirmed", confirmed),
+                    ValueDataEntry("Recovered", recovered),
+                    ValueDataEntry("Death", deaths)
+                )
             )
-        )
-        fragment_country_details_any_chart_view?.setChart(pie)
+            fragment_country_details_any_chart_view?.setChart(pie)
+        }else{
+            fragment_country_details_empty_state_container?.show()
+        }
     }
 }
