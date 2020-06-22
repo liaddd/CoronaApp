@@ -1,0 +1,52 @@
+<?xml version="1.0" encoding="utf-8"?>
+<androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent">
+
+    <TextView
+        android:id="@+id/fragment_country_details_title"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginStart="@dimen/size_16dp"
+        android:layout_marginTop="@dimen/size_16dp"
+        android:layout_marginEnd="@dimen/size_16dp"
+        android:gravity="center"
+        android:textColor="@android:color/black"
+        android:textSize="@dimen/text_24sp"
+        android:textStyle="bold"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent" />
+
+    <TextView
+        android:layout_marginTop="@dimen/size_16dp"
+        android:id="@+id/fragment_country_details_sub_title"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/fragment_country_details_title"
+        android:text="@string/your_are_able_to_click"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"/>
+
+    <com.anychart.AnyChartView
+        android:id="@+id/fragment_country_details_any_chart_view"
+        android:layout_width="@dimen/size_0dp"
+        android:layout_height="@dimen/size_0dp"
+        android:layout_marginTop="@dimen/size_16dp"
+        android:layout_marginBottom="@dimen/size_16dp"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/fragment_country_details_sub_title" />
+
+    <ProgressBar
+        android:id="@+id/fragment_country_details_progress_bar"
+        app:layout_constraintTop_toTopOf="parent"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        android:layout_width="@dimen/size_60dp"
+        android:layout_height="@dimen/size_60dp"/>
+
+</androidx.constraintlayout.widget.ConstraintLayout>

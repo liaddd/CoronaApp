@@ -1,0 +1,131 @@
+<?xml version="1.0" encoding="utf-8"?>
+<androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent">
+
+    <TextView
+        android:id="@+id/fragment_countries_title_text_view"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="@dimen/size_16dp"
+        android:text="@string/countries"
+        android:textSize="@dimen/text_24sp"
+        android:textStyle="bold"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent" />
+
+    <LinearLayout
+        android:id="@+id/fragment_countries_dates_container"
+        android:layout_width="@dimen/size_0dp"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="@dimen/size_16dp"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/fragment_countries_title_text_view">
+
+        <com.google.android.material.textfield.TextInputLayout
+            android:id="@+id/fragment_countries_from_til"
+            style="@style/Widget.MaterialComponents.TextInputLayout.OutlinedBox"
+            android:layout_width="@dimen/size_0dp"
+            android:layout_height="wrap_content"
+            android:layout_margin="@dimen/size_16dp"
+            android:layout_weight="1"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toBottomOf="@+id/fragment_countries_title_text_view">
+
+            <com.google.android.material.textfield.TextInputEditText
+                android:id="@+id/fragment_countries_from_text_input_edit_text"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:focusable="false"
+                android:hint="@string/from" />
+
+        </com.google.android.material.textfield.TextInputLayout>
+
+        <com.google.android.material.textfield.TextInputLayout
+            android:id="@+id/fragment_countries_to_til"
+            style="@style/Widget.MaterialComponents.TextInputLayout.OutlinedBox"
+            android:layout_width="@dimen/size_0dp"
+            android:layout_height="wrap_content"
+            android:layout_margin="@dimen/size_16dp"
+            android:layout_weight="1"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toBottomOf="@+id/fragment_countries_from_til">
+
+            <com.google.android.material.textfield.TextInputEditText
+                android:id="@+id/fragment_countries_to_text_input_edit_text"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:focusable="false"
+                android:hint="@string/to" />
+
+        </com.google.android.material.textfield.TextInputLayout>
+
+    </LinearLayout>
+
+    <androidx.recyclerview.widget.RecyclerView
+        android:id="@+id/fragment_countries_recycler_view"
+        android:layout_width="@dimen/size_0dp"
+        android:layout_height="@dimen/size_0dp"
+        android:layout_marginTop="@dimen/size_16dp"
+        android:layout_marginBottom="@dimen/size_16dp"
+        app:layout_constraintBottom_toTopOf="@+id/fragment_countries_submit_button"
+        app:layout_constraintLeft_toLeftOf="parent"
+        app:layout_constraintRight_toRightOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/fragment_countries_dates_container" />
+
+    <androidx.appcompat.widget.AppCompatButton
+        android:id="@+id/fragment_countries_submit_button"
+        android:layout_width="@dimen/size_0dp"
+        android:layout_height="wrap_content"
+        android:layout_margin="@dimen/size_32dp"
+        android:background="@drawable/black_background_rounded_corners"
+        android:text="@string/submit"
+        android:textAllCaps="false"
+        android:textColor="@android:color/white"
+        app:layout_constraintBottom_toTopOf="@+id/fragment_countries_my_country_button"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent" />
+
+
+    <androidx.appcompat.widget.AppCompatButton
+        android:id="@+id/fragment_countries_my_country_button"
+        android:layout_width="@dimen/size_0dp"
+        android:layout_height="wrap_content"
+        android:layout_margin="@dimen/size_32dp"
+        android:text="@string/get_by_current_location"
+        android:textAllCaps="false"
+        android:textColor="@android:color/white"
+        android:background="@drawable/purple_background_rounded_corners"
+        app:layout_constraintBottom_toTopOf="@+id/fragment_countries_check_for_nearby_button"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent" />
+
+    <androidx.appcompat.widget.AppCompatButton
+        android:id="@+id/fragment_countries_check_for_nearby_button"
+        android:layout_width="@dimen/size_0dp"
+        android:layout_height="wrap_content"
+        android:layout_margin="@dimen/size_32dp"
+        android:text="@string/check_for_nearby"
+        android:textAllCaps="false"
+        android:textColor="@android:color/white"
+        android:background="@drawable/cyan_background_rounded_corners"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent" />
+
+    <ProgressBar
+        android:visibility="gone"
+        android:id="@+id/fragment_countries_progress_bar"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintTop_toTopOf="parent"
+        app:layout_constraintBottom_toBottomOf="parent"
+        android:layout_width="@dimen/size_60dp"
+        android:layout_height="@dimen/size_60dp"/>
+
+</androidx.constraintlayout.widget.ConstraintLayout>

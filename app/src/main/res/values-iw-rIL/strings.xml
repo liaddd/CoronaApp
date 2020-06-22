@@ -1,0 +1,22 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <string name="countries">ארצות</string>
+    <string name="submit">אישור</string>
+    <string name="from">מתאריך</string>
+    <string name="to">עד תאריך</string>
+    <string name="results">  תוצאות ב: %1$s
+        בין התאריכים:
+        \n
+        %2$s - %3$s
+    </string>
+    <string name="your_are_able_to_click">באפשרותך ללחוץ על התרשים בכדי לקבל עוד מידע</string>
+    <string name="check_for_nearby">חפש בקרבתך</string>
+    <string name="get_by_current_location">חפש לפי המיקום שלי</string>
+    <string name="no_gps">ג׳יפיאס לא זמין</string>
+    <string name="activate_gps">נראה שהג׳יפיאס שלך כבוי, תרצה להפעיל אותו?</string>
+    <string name="nearby_infected_person">חולי קורונה קרובים</string>
+    <string name="invalid_inputs">אנא הכנס תאריך התחלה וסיום</string>
+    <string name="from_date_invalid">אנא הכנס תאריך התחלה</string>
+    <string name="to_date_invalid">אנא הכנס תאריך סוף</string>
+    <string name="no_selected_country">נא לבחור ארץ או לחפש לפי מיקומך</string>
+</resources>

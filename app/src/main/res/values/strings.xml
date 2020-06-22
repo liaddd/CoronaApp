@@ -1,0 +1,23 @@
+<resources>
+    <string name="app_name" translatable="false">CoronaApp</string>
+    <string name="countries">Countries</string>
+    <string name="submit">Submit</string>
+    <string name="from">From date</string>
+    <string name="to">To date</string>
+    <string name="results">Results In: %1$s
+        \n
+        Between:
+        \n
+        %2$s - %3$s
+    </string>
+    <string name="your_are_able_to_click">You\'re able to click the chart to see more details</string>
+    <string name="check_for_nearby">Check for Nearby</string>
+    <string name="get_by_current_location">Get by current location</string>
+    <string name="no_gps">GPS isn\'t available</string>
+    <string name="activate_gps">Your GPS seems to be disabled, do you want to enable it?\"</string>
+    <string name="nearby_infected_person">Nearby Infected Person</string>
+    <string name="invalid_inputs">Please fill From Date and To Date details\nand make sure To date is after From date</string>
+    <string name="from_date_invalid">Please fill From date</string>
+    <string name="to_date_invalid">Please fill To date</string>
+    <string name="no_selected_country">please select a Country or use Current location</string>
+</resources>
