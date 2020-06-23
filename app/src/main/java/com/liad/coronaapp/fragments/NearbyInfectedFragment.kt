@@ -100,15 +100,13 @@ class NearbyInfectedFragment : Fragment() {
     private fun showNoGpsDialog() {
         context?.let {
             AlertDialog.Builder(it)
-                .setTitle(getString(R.string.no_gps))
-                .setMessage(getString(R.string.activate_gps))
+                .setTitle(getString(R.string.no_gps)).setMessage(getString(R.string.activate_gps))
                 .setPositiveButton("Yes") { _, _ ->
                     this.startActivityForResult(Intent(Settings.ACTION_LOCATION_SOURCE_SETTINGS), LOCATION_REQUEST_CODE)
                 }.setNegativeButton("No") { dialog, _ ->
                     dialog.dismiss()
                 }
-                .create()
-                .show()
+                .create().show()
         }
     }
 
@@ -158,6 +156,7 @@ class NearbyInfectedFragment : Fragment() {
     override fun onActivityResult(requestCode: Int, resultCode: Int, data: Intent?) {
         super.onActivityResult(requestCode, resultCode, data)
         when (requestCode) {
+            LOCATION_REQUEST_CODE -> checkFroRelevantPermission()
             BLUETOOTH_REQUEST_DISCOVERABLE ->
                 if (resultCode == BLUETOOTH_RESULT_OK) {
                     checkFroRelevantPermission()
@@ -165,12 +164,9 @@ class NearbyInfectedFragment : Fragment() {
                     activity?.supportFragmentManager?.popBackStack()
                     showBluetoothError()
                 }
-            LOCATION_REQUEST_CODE -> checkFroRelevantPermission()
         }
     }
 
-    private fun showBluetoothError() {
-        context?.let { toast(it, "Bluetooth permission required to use this feature") }
-    }
+    private fun showBluetoothError() = context?.let { toast(it, "Bluetooth permission required to use this feature") }
 
 }

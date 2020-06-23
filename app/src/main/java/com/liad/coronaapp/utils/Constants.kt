@@ -1,7 +1,6 @@
 package com.liad.coronaapp.utils
 
 object Constants{
-
     const val ISRAEL = "Israel"
     const val ISRAEL_SLUG = "israel"
     const val SOUTH_AFRICA = "South Africa"

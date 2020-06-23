@@ -16,6 +16,6 @@ val appModule = module {
     // single instance of Repository
     single { CoronaRepository(get()) }
 
-    //
+    // factory for CoronaViewModel
     factory { CoronaViewModel(get()) }
 }

@@ -47,9 +47,7 @@ fun Activity.changeActivity(
     if (closeCurrent) finish()
 }
 
-fun toast(context: Context, message: String, duration: Int = Toast.LENGTH_SHORT) {
-    Toast.makeText(context, message, duration).show()
-}
+fun toast(context: Context, message: String, duration: Int = Toast.LENGTH_SHORT) = Toast.makeText(context, message, duration).show()
 
 // MutableList extension function used to clear list and add new values
 fun <T> MutableList<T>.clearAndAddAll(newData: List<T>) {
@@ -91,10 +89,10 @@ fun String.dateToStringFormat(): String {
 
 // Validate TextInputEditText receiver
 fun TextInputEditText.isValid(): Boolean {
-    return !this.text.isNullOrBlank()
+    return !text.isNullOrBlank()
 }
 
-// Compare between two dates (validate toDate is after or the same as String receiver
+// Compare between two dates (validate toDate is after or the same as String receiver)
 fun String.isBefore(toDate : String): Boolean {
     val inputFormat = SimpleDateFormat("dd/MM/yyyy", Locale.getDefault())
     var date: Date? = null
@@ -110,7 +108,7 @@ fun String.isBefore(toDate : String): Boolean {
 
 // Activity extension function to determine Device location enable/disable
 fun Activity.isDeviceLocationEnabled(): Boolean {
-    val locationManager = this.getSystemService(LOCATION_SERVICE) as LocationManager
+    val locationManager = getSystemService(LOCATION_SERVICE) as LocationManager
     return locationManager.isProviderEnabled(LocationManager.GPS_PROVIDER)
 }
 

@@ -116,9 +116,7 @@ class CountriesFragment : Fragment(), View.OnClickListener, DatePickerDialog.OnD
 
     // Get Selected Country from list
     private fun getCountryClickedListener() = object : CountryAdapter.ICountryClickedListener {
-        override fun onClick(country: Country) {
-            selectedCountry = country
-        }
+        override fun onClick(country: Country) { selectedCountry = country }
     }
 
     // Handle buttons on click
@@ -135,9 +133,8 @@ class CountriesFragment : Fragment(), View.OnClickListener, DatePickerDialog.OnD
     // Check if user enabled access to Location
     private fun checkForLocationPermission() {
         context?.let {
-            if (ActivityCompat.checkSelfPermission(it, Manifest.permission.ACCESS_FINE_LOCATION) == PackageManager.PERMISSION_GRANTED) {
-                getCurrentLocation()
-            } else askLocationPermission()
+            if (ActivityCompat.checkSelfPermission(it, Manifest.permission.ACCESS_FINE_LOCATION) == PackageManager.PERMISSION_GRANTED) getCurrentLocation()
+            else askLocationPermission()
         }
     }
 
@@ -149,12 +146,8 @@ class CountriesFragment : Fragment(), View.OnClickListener, DatePickerDialog.OnD
         }
         activity?.let {
             if (ContextCompat.checkSelfPermission(it, Manifest.permission.ACCESS_FINE_LOCATION) != PackageManager.PERMISSION_GRANTED) {
-                if (ActivityCompat.shouldShowRequestPermissionRationale(it, Manifest.permission.ACCESS_FINE_LOCATION)) {
-                    // add dialog
-                    showNoGpsDialog()
-                }else{
-                    requestPermissions(arrayOf(Manifest.permission.ACCESS_FINE_LOCATION, Manifest.permission.ACCESS_FINE_LOCATION), LOCATION_REQUEST_CODE)
-                }
+                if (ActivityCompat.shouldShowRequestPermissionRationale(it, Manifest.permission.ACCESS_FINE_LOCATION)) showNoGpsDialog()
+                else requestPermissions(arrayOf(Manifest.permission.ACCESS_FINE_LOCATION, Manifest.permission.ACCESS_FINE_LOCATION), LOCATION_REQUEST_CODE)
             }else{
                 requestPermissions(arrayOf(Manifest.permission.ACCESS_FINE_LOCATION, Manifest.permission.ACCESS_FINE_LOCATION), LOCATION_REQUEST_CODE)
             }
@@ -166,18 +159,14 @@ class CountriesFragment : Fragment(), View.OnClickListener, DatePickerDialog.OnD
         activity?.let {
             val countryDetailsFragment = CountryDetailsFragment.newInstance()
 
-            val bundle = Bundle()
-            bundle.putString(Constants.FROM, fromDate)
-            bundle.putString(Constants.TO, toDate)
-            bundle.putString(Constants.COUNTRY_NAME, selectedCountry?.slug)
+            val bundle = Bundle().apply {
+                putString(Constants.FROM, fromDate)
+                putString(Constants.TO, toDate)
+                putString(Constants.COUNTRY_NAME, selectedCountry?.slug)
+            }
 
             countryDetailsFragment.arguments = bundle
-            changeFragment(
-                it.supportFragmentManager,
-                R.id.main_activity_frame_layout,
-                countryDetailsFragment,
-                true
-            )
+            changeFragment(it.supportFragmentManager, R.id.main_activity_frame_layout, countryDetailsFragment, true)
         }
     }
 
@@ -225,15 +214,13 @@ class CountriesFragment : Fragment(), View.OnClickListener, DatePickerDialog.OnD
     private fun showNoGpsDialog() {
         context?.let {
             AlertDialog.Builder(it)
-                .setTitle(getString(R.string.no_gps))
-                .setMessage(getString(R.string.activate_gps))
+                .setTitle(getString(R.string.no_gps)).setMessage(getString(R.string.activate_gps))
                 .setPositiveButton(getString(R.string.yes)) { _, _ ->
                     startActivityForResult(Intent(Settings.ACTION_LOCATION_SOURCE_SETTINGS), LOCATION_REQUEST_CODE)
                 }.setNegativeButton(getString(R.string.no)) { dialog, _ ->
                     dialog.dismiss()
                 }
-                .create()
-                .show()
+                .create().show()
         }
 
     }
@@ -244,9 +231,7 @@ class CountriesFragment : Fragment(), View.OnClickListener, DatePickerDialog.OnD
     }
 
     // Check if all necessary input was given
-    private fun isInputsValid() : Boolean{
-        return fromDateTIE.isValid() && toDateTIE.isValid() && fromDateTIE.text.toString().isBefore(toDateTIE.text.toString())
-    }
+    private fun isInputsValid() : Boolean = fromDateTIE.isValid() && toDateTIE.isValid() && fromDateTIE.text.toString().isBefore(toDateTIE.text.toString())
 
     // Validate inputs and show relevant error
     private fun showRelevantError() {
@@ -275,13 +260,7 @@ class CountriesFragment : Fragment(), View.OnClickListener, DatePickerDialog.OnD
     private fun showDatePickerDialog(tag: String) {
         selectedDatePickerTag = tag
         activity?.let {
-            DatePickerDialog(
-                it,
-                this,
-                calendar.get(Calendar.YEAR),
-                calendar.get(Calendar.MONDAY),
-                calendar.get(Calendar.DAY_OF_MONTH)
-            ).show()
+            DatePickerDialog(it, this, calendar.get(Calendar.YEAR), calendar.get(Calendar.MONDAY), calendar.get(Calendar.DAY_OF_MONTH)).show()
         }
     }
 
@@ -299,11 +278,7 @@ class CountriesFragment : Fragment(), View.OnClickListener, DatePickerDialog.OnD
     }
 
     // triggered after permission granted/
-    override fun onRequestPermissionsResult(
-        requestCode: Int,
-        permissions: Array<out String>,
-        grantResults: IntArray
-    ) {
+    override fun onRequestPermissionsResult(requestCode: Int, permissions: Array<out String>, grantResults: IntArray) {
         super.onRequestPermissionsResult(requestCode, permissions, grantResults)
         when (requestCode) {
             LOCATION_REQUEST_CODE ->

@@ -16,11 +16,8 @@ class CountryAdapter : RecyclerView.Adapter<CountryAdapter.ViewHolder>() {
     private var countries = mutableListOf<Country>()
     var listener: ICountryClickedListener? = null
 
-    override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): ViewHolder {
-        return ViewHolder(
-            LayoutInflater.from(parent.context).inflate(R.layout.country_list_item, parent, false)
-        )
-    }
+    override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): ViewHolder =
+        ViewHolder(LayoutInflater.from(parent.context).inflate(R.layout.country_list_item, parent, false))
 
     override fun getItemCount(): Int = countries.size
 
@@ -38,6 +35,7 @@ class CountryAdapter : RecyclerView.Adapter<CountryAdapter.ViewHolder>() {
         }
     }
 
+    // handling item clicked state (textColor & background)
     private fun handleCountryClick(country: Country, holder: ViewHolder) {
         if (country.isSelected) {
             holder.itemView.background = ResourcesCompat.getDrawable(holder.itemView.resources, R.drawable.black_background_rounded_corners, null)
@@ -62,6 +60,7 @@ class CountryAdapter : RecyclerView.Adapter<CountryAdapter.ViewHolder>() {
         val countryName = itemView.findViewById(R.id.country_list_item_name_text_view) as TextView
     }
 
+    // updating countries list
     fun setCountries(newCountries: List<Country>) {
         countries.clearAndAddAll(newCountries)
         notifyDataSetChanged()
